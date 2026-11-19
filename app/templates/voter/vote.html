@@ -1,0 +1,341 @@
+
+{% extends "base.html" %}
+
+{% block title %}Cast Your Vote | VoteSphere{% endblock %}
+
+{% block content %}
+
+<div class="voting-page">
+
+    <!-- Back Navigation -->
+    <a href="{{ url_for('web.election_details', election_id=election.id) }}"
+       class="back-link">
+
+        <i class="bi bi-arrow-left"></i>
+        Back to Election Details
+
+    </a>
+
+
+    <!-- Voting Header -->
+    <section class="voting-hero">
+
+        <div class="voting-hero-content">
+
+            <span class="dashboard-eyebrow">
+                <i class="bi bi-shield-check"></i>
+                SECURE VOTING
+            </span>
+
+            <h1>Cast Your Vote</h1>
+
+            <p>
+                Your voice matters. Review the candidates and select
+                the person you want to represent you.
+            </p>
+
+            <div class="voting-election-name">
+                <i class="bi bi-ballot2"></i>
+                {{ election.title }}
+            </div>
+
+        </div>
+
+        <div class="voting-hero-icon">
+            <i class="bi bi-person-check"></i>
+        </div>
+
+    </section>
+
+
+    <!-- Candidate Selection -->
+    <section class="voting-selection-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>Select Your Candidate</h2>
+
+                <p>
+                    Choose one candidate. You cannot change your vote
+                    after submitting it.
+                </p>
+            </div>
+
+            <span class="section-badge">
+                {{ candidates|length }} candidates
+            </span>
+
+        </div>
+
+
+        {% if candidates %}
+
+            <form
+                method="POST"
+                action="{{ url_for('web.submit_vote', election_id=election.id) }}"
+                id="voteForm"
+            >
+
+                <div class="vote-candidate-grid">
+
+                    {% for candidate in candidates %}
+
+                        <label class="vote-candidate-card">
+
+                            <input
+                                type="radio"
+                                name="candidate_id"
+                                value="{{ candidate.id }}"
+                                required
+                            >
+
+                            <div class="vote-candidate-card-inner">
+
+                                <div class="vote-candidate-top">
+
+                                    <div class="vote-candidate-avatar">
+                                        <i class="bi bi-person-fill"></i>
+                                    </div>
+
+                                    <span class="vote-select-indicator">
+                                        <i class="bi bi-check-lg"></i>
+                                    </span>
+
+                                </div>
+
+                                <div class="vote-candidate-content">
+
+                                    <span class="candidate-number">
+                                        Candidate {{ loop.index }}
+                                    </span>
+
+                                    <h3>{{ candidate.name }}</h3>
+
+                                    <span class="candidate-party">
+                                        {{ candidate.party_or_group or "Independent" }}
+                                    </span>
+
+                                    <div class="vote-candidate-manifesto">
+
+                                        <h4>
+                                            <i class="bi bi-lightbulb"></i>
+                                            Manifesto
+                                        </h4>
+
+                                        <p>
+                                            {{ candidate.manifesto or
+                                               "No manifesto has been provided for this candidate." }}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="vote-candidate-footer">
+                                    <span>
+                                        <i class="bi bi-hand-index"></i>
+                                        Select this candidate
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </label>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Voting Notice -->
+                <div class="vote-notice">
+
+                    <div class="vote-notice-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+
+                    <div>
+                        <h3>Your vote is important</h3>
+
+                        <p>
+                            Please review your selection carefully.
+                            Once submitted, your vote cannot be changed.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- Submit Button -->
+                <div class="vote-submit-area">
+
+                    <button
+                        type="submit"
+                        class="election-vote-btn"
+                        id="submitVoteBtn"
+                    >
+                        Submit My Vote
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                    <p>
+                        <i class="bi bi-lock-fill"></i>
+                        Your vote will be securely recorded.
+                    </p>
+
+                </div>
+
+            </form>
+            <!-- Vote Confirmation Modal -->
+<div class="modal fade" id="voteConfirmModal"
+     tabindex="-1"
+     aria-labelledby="voteConfirmTitle"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content vote-confirm-modal">
+
+            <div class="vote-confirm-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div class="modal-body text-center">
+
+                <span class="vote-confirm-eyebrow">
+                    FINAL CONFIRMATION
+                </span>
+
+                <h2 id="voteConfirmTitle">
+                    Confirm Your Vote
+                </h2>
+
+                <p class="vote-confirm-description">
+                    You're about to submit your vote for:
+                </p>
+
+                <div class="vote-confirm-candidate">
+                    <i class="bi bi-person-circle"></i>
+                    <span id="selectedCandidateName">
+                        Selected Candidate
+                    </span>
+                </div>
+
+                <div class="vote-confirm-warning">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <span>
+                        Your vote is final and cannot be changed
+                        after submission.
+                    </span>
+                </div>
+
+                <div class="vote-confirm-actions">
+
+                    <button type="button"
+                            class="vote-cancel-btn"
+                            data-bs-dismiss="modal">
+                        Go Back
+                    </button>
+
+                    <button type="button"
+                            class="vote-confirm-btn"
+                            id="confirmVoteBtn">
+                        Confirm Vote
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-state-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+
+                <h3>No candidates available</h3>
+
+                <p>
+                    Candidates have not been added to this election yet.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+
+<!-- NEW VOTE CONFIRMATION SCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const voteForm = document.getElementById("voteForm");
+    const submitVoteBtn = document.getElementById("submitVoteBtn");
+
+    const modalElement = document.getElementById("voteConfirmModal");
+    const confirmVoteBtn = document.getElementById("confirmVoteBtn");
+    const selectedCandidateName = document.getElementById(
+        "selectedCandidateName"
+    );
+
+    if (!voteForm || !modalElement) return;
+
+    const voteModal = new bootstrap.Modal(modalElement);
+
+    voteForm.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        const selectedCandidate = document.querySelector(
+            'input[name="candidate_id"]:checked'
+        );
+
+        if (!selectedCandidate) return;
+
+        const candidateCard = selectedCandidate.closest(
+            ".vote-candidate-card"
+        );
+
+        const candidateName = candidateCard.querySelector("h3");
+
+        selectedCandidateName.textContent = candidateName
+            ? candidateName.textContent.trim()
+            : "Selected Candidate";
+
+        voteModal.show();
+    });
+
+    confirmVoteBtn.addEventListener("click", function () {
+
+        confirmVoteBtn.disabled = true;
+
+        confirmVoteBtn.innerHTML =
+            '<span class="spinner-border spinner-border-sm me-2"></span>' +
+            'Submitting...';
+
+        if (submitVoteBtn) {
+            submitVoteBtn.disabled = true;
+            submitVoteBtn.innerHTML =
+                '<span class="spinner-border spinner-border-sm me-2"></span>' +
+                'Submitting Vote...';
+        }
+
+        voteForm.submit();
+    });
+
+});
+</script>
+
+{% endblock %}

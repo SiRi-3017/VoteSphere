@@ -1,0 +1,443 @@
+
+{% extends "base.html" %}
+
+{% block title %}Election Results | VoteSphere{% endblock %}
+
+{% block breadcrumb %}
+<span class="breadcrumb-muted">Pages</span>
+<i class="bi bi-chevron-right"></i>
+<span class="breadcrumb-current">Results</span>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .results-page {
+        padding: 28px 0;
+    }
+
+    .results-hero {
+        background: linear-gradient(120deg, #0b1f3a, #2457a7, #06b6d4);
+        color: white;
+        border-radius: 24px;
+        padding: 38px;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .results-hero h1 {
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        font-weight: 800;
+        margin: 14px 0;
+    }
+
+    .results-hero p {
+        color: rgba(255, 255, 255, .8);
+        max-width: 600px;
+        margin-bottom: 0;
+    }
+
+    .results-hero-icon {
+        font-size: 4rem;
+        opacity: .8;
+    }
+
+    .results-section-title {
+        color: #0b1f3a;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .results-section-description {
+        color: #64748b;
+        margin-bottom: 25px;
+    }
+
+    .results-election-card {
+        background: white;
+        border: 1px solid #e8edf5;
+        border-radius: 20px;
+        padding: 26px;
+        margin-bottom: 28px;
+        box-shadow: 0 8px 28px rgba(11, 31, 58, .05);
+    }
+
+    .results-election-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 25px;
+    }
+
+    .results-election-header h3 {
+        color: #0b1f3a;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .results-election-header p {
+        color: #64748b;
+        margin-bottom: 0;
+    }
+
+    .results-closed-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: #f1f5f9;
+        color: #475569;
+        border-radius: 30px;
+        padding: 9px 14px;
+        font-size: .8rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .results-total-card {
+        background: #f8fafc;
+        border: 1px solid #e8edf5;
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 24px;
+    }
+
+    .results-total-label {
+        color: #64748b;
+        font-size: .85rem;
+        font-weight: 600;
+    }
+
+    .results-total-value {
+        color: #0b1f3a;
+        font-size: 2rem;
+        font-weight: 800;
+        margin-top: 5px;
+    }
+
+    .candidate-result {
+        padding: 20px 0;
+        border-bottom: 1px solid #edf1f7;
+    }
+
+    .candidate-result:last-child {
+        border-bottom: none;
+    }
+
+    .candidate-result-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 12px;
+    }
+
+    .candidate-result-name {
+        color: #0b1f3a;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .candidate-result-party {
+        color: #94a3b8;
+        font-size: .85rem;
+    }
+
+    .candidate-result-votes {
+        color: #0b1f3a;
+        font-weight: 800;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .candidate-result-votes small {
+        display: block;
+        color: #94a3b8;
+        font-size: .75rem;
+        font-weight: 500;
+    }
+
+    .result-progress {
+        height: 10px;
+        background: #edf2f7;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .result-progress-bar {
+        width: 0%;
+        height: 100%;
+        border-radius: 20px;
+        background: linear-gradient(90deg, #2563eb, #06b6d4);
+        transition: width .5s ease;
+    }
+
+    .results-empty {
+        background: white;
+        border: 1px dashed #cbd5e1;
+        border-radius: 20px;
+        padding: 55px 25px;
+        text-align: center;
+    }
+
+    .results-empty-icon {
+        color: #94a3b8;
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+    }
+
+    .results-empty h3 {
+        color: #0b1f3a;
+        font-weight: 800;
+    }
+
+    .results-empty p {
+        color: #64748b;
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 576px) {
+        .results-hero {
+            padding: 25px;
+        }
+
+        .results-election-card {
+            padding: 20px;
+        }
+
+        .results-election-header {
+            flex-direction: column;
+        }
+    }
+</style>
+
+
+<div class="results-page">
+
+    <!-- Results Hero -->
+    <section class="results-hero">
+
+        <div class="d-flex justify-content-between align-items-center gap-4">
+
+            <div>
+
+                <span class="small fw-bold text-uppercase"
+                      style="letter-spacing: 2px; color: #a5f3fc;">
+
+                    VOTER PORTAL
+
+                </span>
+
+                <h1>
+                    Election Results
+                </h1>
+
+                <p>
+                    Explore verified election outcomes and see how
+                    votes were distributed among candidates.
+                </p>
+
+            </div>
+
+            <div class="results-hero-icon d-none d-sm-block">
+                <i class="bi bi-bar-chart-line"></i>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Results Heading -->
+    <section class="mb-4">
+
+        <h2 class="results-section-title">
+            Published Results
+        </h2>
+
+        <p class="results-section-description">
+            Results are available after an election has officially closed.
+        </p>
+
+    </section>
+
+
+    {% if elections %}
+
+        {% for election in elections %}
+
+            {% set rows = results_by_election.get(election.id, []) %}
+
+            {% set total_votes = rows | sum(attribute='vote_count') %}
+
+            <article class="results-election-card">
+
+                <!-- Election Header -->
+                <div class="results-election-header">
+
+                    <div>
+
+                        <h3>
+                            {{ election.title }}
+                        </h3>
+
+                        <p>
+                            {{ election.description or
+                               "Official election results." }}
+                        </p>
+
+                    </div>
+
+                    <span class="results-closed-badge">
+
+                        <i class="bi bi-check-circle"></i>
+                        Election Closed
+
+                    </span>
+
+                </div>
+
+
+                <!-- Total Votes -->
+                <div class="results-total-card">
+
+                    <div class="results-total-label">
+                        Total Votes Recorded
+                    </div>
+
+                    <div class="results-total-value">
+                        {{ total_votes }}
+                    </div>
+
+                </div>
+
+
+                <!-- Candidate Results -->
+                {% if rows %}
+
+                    {% for row in rows %}
+
+                        {% set percentage =
+                            (row.vote_count / total_votes * 100)
+                            if total_votes > 0 else 0
+                        %}
+
+                        <div class="candidate-result">
+
+                            <div class="candidate-result-top">
+
+                                <div>
+
+                                    <div class="candidate-result-name">
+                                        {{ row.name }}
+                                    </div>
+
+                                    {% if row.party_or_group %}
+
+                                        <div class="candidate-result-party">
+                                            {{ row.party_or_group }}
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <div class="candidate-result-votes">
+
+                                    {{ row.vote_count }}
+
+                                    <small>
+                                        {{ "%.1f"|format(percentage) }}%
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Vote Percentage Bar -->
+                            <div class="result-progress">
+
+                                <div
+                                    class="result-progress-bar"
+                                    data-result-width="{{ percentage | round(1) }}"
+                                    role="progressbar"
+                                    aria-valuenow="{{ percentage | round(1) }}"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    aria-label="{{ row.name }} vote percentage"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <p class="text-secondary mb-0">
+                        No candidates were registered for this election.
+                    </p>
+
+                {% endif %}
+
+            </article>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <!-- Empty Results State -->
+        <div class="results-empty">
+
+            <div class="results-empty-icon">
+                <i class="bi bi-bar-chart"></i>
+            </div>
+
+            <h3>
+                No published results yet
+            </h3>
+
+            <p>
+                Results will appear here once an election has officially closed.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- Animate Result Bars -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const progressBars = document.querySelectorAll(
+            ".result-progress-bar"
+        );
+
+        progressBars.forEach(function (bar) {
+
+            const percentage = Number(
+                bar.dataset.resultWidth || 0
+            );
+
+            const safePercentage = Math.min(
+                100,
+                Math.max(0, percentage)
+            );
+
+            requestAnimationFrame(function () {
+                bar.style.width = safePercentage + "%";
+            });
+
+        });
+
+    });
+</script>
+
+{% endblock %}

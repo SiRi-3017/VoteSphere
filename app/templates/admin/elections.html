@@ -1,0 +1,556 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="admin-elections">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div>
+            <p class="eyebrow">ADMINISTRATION</p>
+            <h1>Manage Elections</h1>
+            <p class="subtitle">
+                Create and manage elections from one place.
+            </p>
+        </div>
+
+        <a href="{{ url_for('web.admin_dashboard') }}" class="back-btn">
+            ← Dashboard
+        </a>
+    </div>
+
+
+    <div class="election-layout">
+
+        <!-- CREATE ELECTION FORM -->
+        <section class="create-card">
+
+            <div class="card-heading">
+                <div class="heading-icon">＋</div>
+
+                <div>
+                    <h2>Create Election</h2>
+                    <p>Start by adding the election details.</p>
+                </div>
+            </div>
+
+
+            <form method="POST" class="election-form">
+
+                <label for="title">Election title</label>
+
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="e.g. Student Council Election 2026"
+                    maxlength="200"
+                    required
+                >
+
+
+                <label for="description">Description</label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="5"
+                    placeholder="Describe the purpose of this election..."
+                ></textarea>
+
+
+                <!-- ELECTION START TIME -->
+                <label for="starts_at">Election starts at</label>
+
+                <input
+                    type="datetime-local"
+                    id="starts_at"
+                    name="starts_at"
+                    required
+                >
+
+
+                <!-- ELECTION END TIME -->
+                <label for="ends_at">Election ends at</label>
+
+                <input
+                    type="datetime-local"
+                    id="ends_at"
+                    name="ends_at"
+                    required
+                >
+
+
+                <div class="draft-note">
+                    <span>●</span>
+                    Elections automatically open and close according to their schedule.
+                </div>
+
+
+                <button type="submit" class="create-btn">
+                    Schedule Election
+                    <span>→</span>
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- EXISTING ELECTIONS -->
+        <section class="list-card">
+
+            <div class="list-heading">
+
+                <div>
+                    <h2>All Elections</h2>
+                    <p>Your election records</p>
+                </div>
+
+                <span class="count-badge">
+                    {{ elections|length }}
+                </span>
+
+            </div>
+
+
+            {% if elections %}
+
+                <div class="election-list">
+
+                    {% for election in elections %}
+
+                        <div class="election-item">
+
+                            <div class="election-symbol">▣</div>
+
+                            <div class="election-info">
+
+                                <h3>{{ election.title }}</h3>
+
+                                <p>
+                                    {{ election.description
+                                       if election.description
+                                       else "No description provided." }}
+                                </p>
+
+                                <div class="election-meta">
+
+                                    <span class="election-id">
+                                        Election #{{ election.id }}
+                                    </span>
+
+                                    <span class="status status-{{ election.status }}">
+                                        {{ election.status|title }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">▤</div>
+
+                    <h3>No elections yet</h3>
+
+                    <p>Create your first election using the form.</p>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<style>
+
+/* MAIN CONTAINER */
+
+.admin-elections {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px;
+    color: #382333;
+}
+
+
+/* PAGE HEADER */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.eyebrow {
+    color: #9c4567;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin: 0 0 8px;
+}
+
+.page-header h1 {
+    font-size: 30px;
+    margin: 0;
+    font-weight: 800;
+    color: #382333;
+}
+
+.subtitle {
+    color: #95818d;
+    margin: 8px 0 0;
+}
+
+.back-btn {
+    text-decoration: none;
+    color: #71374f;
+    background: #fff;
+    border: 1px solid #ead9e1;
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.back-btn:hover {
+    background: #fbf0f4;
+}
+
+
+/* GRID LAYOUT */
+
+.election-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.5fr);
+    gap: 24px;
+    align-items: start;
+}
+
+
+/* CARDS */
+
+.create-card,
+.list-card {
+    background: #fff;
+    border: 1px solid #f0e2e8;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 28px rgba(80, 35, 55, 0.05);
+}
+
+
+/* CARD HEADINGS */
+
+.card-heading,
+.list-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.card-heading {
+    justify-content: flex-start;
+}
+
+.heading-icon {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    background: #faeaf0;
+    color: #963e62;
+    border-radius: 12px;
+    font-size: 25px;
+}
+
+.card-heading h2,
+.list-heading h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 750;
+    color: #422638;
+}
+
+.card-heading p,
+.list-heading p {
+    margin: 5px 0 0;
+    color: #a18d99;
+    font-size: 13px;
+}
+
+
+/* FORM */
+
+.election-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.election-form label {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 9px;
+    color: #594052;
+}
+
+.election-form input,
+.election-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #eadce3;
+    border-radius: 10px;
+    padding: 13px 14px;
+    margin-bottom: 20px;
+    font: inherit;
+    font-size: 14px;
+    color: #493443;
+    background: #fdfafb;
+    outline: none;
+    transition: 0.2s;
+}
+
+.election-form input:focus,
+.election-form textarea:focus {
+    border-color: #ae6683;
+    box-shadow: 0 0 0 3px rgba(174, 102, 131, 0.12);
+}
+
+.election-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.election-form input[type="datetime-local"] {
+    color: #735b6a;
+    cursor: pointer;
+}
+
+
+/* HELPER NOTE */
+
+.draft-note {
+    color: #917b89;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: -4px 0 20px;
+}
+
+.draft-note span {
+    color: #c47b99;
+    margin-right: 5px;
+}
+
+
+/* CREATE BUTTON */
+
+.create-btn {
+    border: 0;
+    border-radius: 11px;
+    padding: 14px 17px;
+    background: linear-gradient(135deg, #78364f, #b45e7d);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 750;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.2s;
+    box-shadow: 0 7px 16px rgba(120, 54, 79, 0.18);
+}
+
+.create-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 20px rgba(120, 54, 79, 0.25);
+}
+
+
+/* ELECTION COUNT */
+
+.count-badge {
+    background: #faeaf0;
+    color: #963e62;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+/* ELECTION LIST */
+
+.election-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.election-item {
+    display: flex;
+    gap: 15px;
+    padding: 18px 0;
+    border-bottom: 1px solid #f1e8ed;
+}
+
+.election-item:first-child {
+    padding-top: 0;
+}
+
+.election-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.election-symbol {
+    flex-shrink: 0;
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #faedf2;
+    color: #963e62;
+    font-size: 20px;
+}
+
+.election-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.election-info h3 {
+    font-size: 15px;
+    margin: 0 0 7px;
+    font-weight: 750;
+    color: #422638;
+    overflow-wrap: anywhere;
+}
+
+.election-info p {
+    color: #95818d;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 12px;
+    overflow-wrap: anywhere;
+}
+
+
+/* STATUS */
+
+.election-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.election-id {
+    font-size: 11px;
+    color: #a18d99;
+}
+
+.status {
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.status-draft {
+    color: #a16a0c;
+    background: #fff5df;
+}
+
+.status-scheduled {
+    color: #79529b;
+    background: #f2eafb;
+}
+
+.status-open {
+    color: #13845d;
+    background: #e6f8f0;
+}
+
+.status-closed {
+    color: #64748b;
+    background: #edf1f5;
+}
+
+
+/* EMPTY STATE */
+
+.empty-state {
+    text-align: center;
+    padding: 45px 15px;
+}
+
+.empty-icon {
+    font-size: 35px;
+    color: #c58ba3;
+    margin-bottom: 12px;
+}
+
+.empty-state h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.empty-state p {
+    color: #a18d99;
+    font-size: 13px;
+    margin: 0;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+
+    .election-layout {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .admin-elections {
+        padding: 18px;
+    }
+
+    .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .page-header h1 {
+        font-size: 25px;
+    }
+
+    .create-card,
+    .list-card {
+        padding: 20px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

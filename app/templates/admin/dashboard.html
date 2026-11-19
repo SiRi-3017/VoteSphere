@@ -1,0 +1,312 @@
+
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard | VoteSphere{% endblock %}
+
+{% block breadcrumb %}
+<span class="breadcrumb-muted">Admin</span>
+<i class="bi bi-chevron-right"></i>
+<span class="breadcrumb-current">Dashboard</span>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .admin-dashboard {
+        padding: 28px 0;
+    }
+
+    .admin-welcome {
+        background: linear-gradient(120deg, #0b1f3a, #2457a7, #06b6d4);
+        color: white;
+        border-radius: 24px;
+        padding: 38px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+    }
+
+    .admin-eyebrow {
+        color: #a5f3fc;
+        font-size: .8rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+
+    .admin-welcome h1 {
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        font-weight: 800;
+        margin: 14px 0;
+    }
+
+    .admin-welcome p {
+        color: rgba(255, 255, 255, .8);
+        max-width: 600px;
+        margin-bottom: 0;
+    }
+
+    .admin-welcome-icon {
+        font-size: 4.5rem;
+        color: #a5f3fc;
+        opacity: .9;
+    }
+
+    .admin-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .admin-stat-card {
+        background: white;
+        border: 1px solid #e8edf5;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 8px 28px rgba(11, 31, 58, .05);
+    }
+
+    .admin-stat-icon {
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 1.4rem;
+        margin-bottom: 18px;
+    }
+
+    .admin-stat-label {
+        color: #64748b;
+        font-size: .9rem;
+        font-weight: 600;
+    }
+
+    .admin-stat-value {
+        color: #0b1f3a;
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 7px 0;
+    }
+
+    .admin-stat-note {
+        color: #94a3b8;
+        font-size: .82rem;
+        margin: 0;
+    }
+
+    .admin-actions {
+        background: white;
+        border: 1px solid #e8edf5;
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 8px 28px rgba(11, 31, 58, .05);
+    }
+
+    .admin-actions h2 {
+        color: #0b1f3a;
+        font-size: 1.3rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .admin-actions > p {
+        color: #64748b;
+        margin-bottom: 24px;
+    }
+
+    .admin-action-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .admin-action-link {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        border: 1px solid #e8edf5;
+        border-radius: 16px;
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+    .admin-action-link:hover {
+        border-color: #06b6d4;
+        background: #f0fdff;
+        transform: translateY(-2px);
+    }
+
+    .admin-action-link > i {
+        color: #2563eb;
+        font-size: 1.6rem;
+    }
+
+    .admin-action-link h3 {
+        color: #0b1f3a;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .admin-action-link span {
+        color: #64748b;
+        font-size: .85rem;
+    }
+
+    @media (max-width: 992px) {
+        .admin-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 576px) {
+        .admin-welcome {
+            padding: 25px;
+        }
+
+        .admin-welcome-icon {
+            display: none;
+        }
+
+        .admin-stats,
+        .admin-action-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .admin-actions {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="admin-dashboard">
+
+    <!-- Welcome -->
+    <section class="admin-welcome">
+
+        <div>
+            <span class="admin-eyebrow">
+                <i class="bi bi-shield-lock"></i>
+                ADMINISTRATION
+            </span>
+
+            <h1>Welcome back, {{ user.name }}!</h1>
+
+            <p>
+                Manage elections, oversee participation, and keep
+                VoteSphere running smoothly.
+            </p>
+        </div>
+
+        <div class="admin-welcome-icon">
+            <i class="bi bi-speedometer2"></i>
+        </div>
+
+    </section>
+
+
+    <!-- Statistics -->
+    <section class="admin-stats">
+
+        <div class="admin-stat-card">
+            <div class="admin-stat-icon">
+                <i class="bi bi-calendar-event"></i>
+            </div>
+
+            <span class="admin-stat-label">Total Elections</span>
+            <div class="admin-stat-value">{{ total_elections }}</div>
+            <p class="admin-stat-note">All registered elections</p>
+        </div>
+
+        <div class="admin-stat-card">
+            <div class="admin-stat-icon">
+                <i class="bi bi-people"></i>
+            </div>
+
+            <span class="admin-stat-label">Registered Voters</span>
+            <div class="admin-stat-value">{{ total_voters }}</div>
+            <p class="admin-stat-note">Voter accounts</p>
+        </div>
+
+        <div class="admin-stat-card">
+            <div class="admin-stat-icon">
+                <i class="bi bi-person-badge"></i>
+            </div>
+
+            <span class="admin-stat-label">Total Candidates</span>
+            <div class="admin-stat-value">{{ total_candidates }}</div>
+            <p class="admin-stat-note">Across all elections</p>
+        </div>
+
+        <div class="admin-stat-card">
+            <div class="admin-stat-icon">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+
+            <span class="admin-stat-label">Votes Recorded</span>
+            <div class="admin-stat-value">{{ total_votes }}</div>
+            <p class="admin-stat-note">Successfully recorded votes</p>
+        </div>
+
+    </section>
+
+
+    <!-- Quick Actions -->
+<section class="admin-actions">
+
+    <h2>Quick Actions</h2>
+
+    <p>
+        Manage the main components of your voting system.
+    </p>
+
+    <div class="admin-action-grid">
+
+        <a href="{{ url_for('web.admin_elections') }}"
+           class="admin-action-link">
+
+            <i class="bi bi-calendar-plus"></i>
+
+            <div>
+                <h3>Manage Elections</h3>
+                <span>Create and manage election schedules</span>
+            </div>
+
+        </a>
+
+        <a href="{{ url_for('web.admin_candidates') }}"
+           class="admin-action-link">
+
+            <i class="bi bi-person-badge"></i>
+
+            <div>
+                <h3>Manage Candidates</h3>
+                <span>Add and manage election candidates</span>
+            </div>
+
+        </a>
+
+        <a href="{{ url_for('web.results_page') }}"
+           class="admin-action-link">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            <div>
+                <h3>View Results</h3>
+                <span>Review election outcomes</span>
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+</div>
+
+{% endblock %}

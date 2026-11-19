@@ -1,0 +1,80 @@
+
+{% extends "base.html" %}
+
+{% block title %}Election Details | VoteSphere{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-8">
+
+            <section class="voting-info-card">
+
+                <div class="voting-info-icon">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+
+                <div class="voting-info-content">
+                    <span class="voting-info-label">
+                        SECURE & CONFIDENTIAL
+                    </span>
+
+                    <h2>Your vote matters.</h2>
+
+                    <p>
+                        Every vote helps shape the future. Review the candidates
+                        carefully before making your choice.
+                    </p>
+
+                    <div class="voting-info-notice">
+                        <i class="bi bi-info-circle-fill"></i>
+                        <span>
+                            You can cast only one vote in this election.
+                            Your choice cannot be changed after submission.
+                        </span>
+                    </div>
+                </div>
+
+                <div class="voting-info-action">
+
+                    {% if already_voted %}
+
+                        <div class="voting-status-complete">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>
+                                <strong>Vote recorded</strong>
+                                <small>You have already participated in this election.</small>
+                            </span>
+                        </div>
+
+                    {% elif candidates %}
+
+                        <a
+                            href="{{ url_for('web.submit_vote', election_id=election.id) }}"
+                            class="election-vote-btn"
+                        >
+                            Continue to Vote
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    {% else %}
+
+                        <button
+                            type="button"
+                            class="election-vote-btn"
+                            disabled
+                        >
+                            No Candidates Available
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,355 @@
+
+{% extends "base.html" %}
+
+{% block title %}VoteSphere | Your Voice. Your Vote.{% endblock %}
+
+{% block body_class %}landing-page{% endblock %}
+
+{% block sidebar %}{% endblock %}
+
+{% block page_header %}{% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="landing-hero">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            CLOUD-BASED ONLINE VOTING
+        </div>
+
+        <h1 class="hero-title">
+            Your Voice.
+            <span>Your Vote.</span>
+            <br>
+            Your Future.
+        </h1>
+
+        <p class="hero-description">
+            Participate in elections with confidence.
+            VoteSphere brings a modern, accessible, and transparent
+            voting experience to everyone.
+        </p>
+
+        <div class="hero-actions">
+
+            <a href="/register" class="btn btn-primary hero-primary-btn">
+                Get Started
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+            <a href="/login" class="btn btn-outline-primary hero-secondary-btn">
+                Sign In
+                <i class="bi bi-box-arrow-in-right"></i>
+            </a>
+
+        </div>
+
+        <div class="hero-trust">
+
+            <div class="hero-trust-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <span class="hero-trust-title">
+                    Your participation matters
+                </span>
+
+                <span class="hero-trust-description">
+                    Every eligible vote deserves a voice.
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HERO VISUAL -->
+    <div class="hero-visual">
+
+        <div class="hero-visual-glow"></div>
+
+        <div class="hero-election-card">
+
+            <div class="hero-card-header">
+
+                <div class="hero-card-icon">
+                    <i class="bi bi-ballot-check"></i>
+                </div>
+
+                <div>
+                    <span class="hero-card-eyebrow">
+                        ELECTION PORTAL
+                    </span>
+
+                    <h3 class="hero-card-title">
+                        Your Election
+                    </h3>
+                </div>
+
+                <span class="hero-live-badge">
+                    <span></span>
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <div class="hero-card-divider"></div>
+
+
+            <div class="hero-election-content">
+
+                <div class="hero-election-label">
+                    <i class="bi bi-calendar-event"></i>
+                    ELECTION PARTICIPATION
+                </div>
+
+                <h4>
+                    Make your choice count.
+                </h4>
+
+                <p>
+                    Explore candidates, review their manifestos,
+                    and participate in the election.
+                </p>
+
+            </div>
+
+
+            <div class="hero-candidate-preview">
+
+                <div class="hero-candidate-avatar">
+                    <i class="bi bi-person"></i>
+                </div>
+
+                <div class="hero-candidate-info">
+                    <span class="hero-candidate-name">
+                        Your decision
+                    </span>
+
+                    <span class="hero-candidate-subtitle">
+                        Your voice in action
+                    </span>
+                </div>
+
+                <div class="hero-candidate-check">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+
+            </div>
+
+
+            <div class="hero-card-footer">
+
+                <div class="hero-card-footer-icon">
+                    <i class="bi bi-lock"></i>
+                </div>
+
+                <span>
+                    Secure session-based access
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-floating-card hero-floating-top">
+
+            <div class="floating-icon floating-icon-blue">
+                <i class="bi bi-person-check"></i>
+            </div>
+
+            <div>
+                <span class="floating-card-title">
+                    Voter access
+                </span>
+
+                <span class="floating-card-description">
+                    Authorized users
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="hero-floating-card hero-floating-bottom">
+
+            <div class="floating-icon floating-icon-green">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div>
+                <span class="floating-card-title">
+                    Participation
+                </span>
+
+                <span class="floating-card-description">
+                    One vote per election
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FEATURE SECTION -->
+<section class="landing-features">
+
+    <div class="landing-section-heading">
+
+        <span class="section-eyebrow">
+            WHY VOTESPHERE?
+        </span>
+
+        <h2>
+            Voting made simple.
+        </h2>
+
+        <p>
+            A thoughtfully designed platform that makes
+            election participation straightforward.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+
+            <article class="landing-feature-card">
+
+                <div class="feature-icon feature-icon-blue">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+
+                <h3>
+                    Secure Access
+                </h3>
+
+                <p>
+                    Registered users can access elections through
+                    authenticated sessions and protected routes.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <article class="landing-feature-card">
+
+                <div class="feature-icon feature-icon-purple">
+                    <i class="bi bi-ballot"></i>
+                </div>
+
+                <h3>
+                    Simple Voting
+                </h3>
+
+                <p>
+                    Review election information and candidate
+                    manifestos before making your selection.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <article class="landing-feature-card">
+
+                <div class="feature-icon feature-icon-green">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+
+                <h3>
+                    Clear Results
+                </h3>
+
+                <p>
+                    Access election results when they become
+                    available according to election rules.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CTA SECTION -->
+<section class="landing-cta">
+
+    <div class="landing-cta-content">
+
+        <div class="cta-icon">
+            <i class="bi bi-megaphone"></i>
+        </div>
+
+        <div>
+            <h2>
+                Your voice deserves to be heard.
+            </h2>
+
+            <p>
+                Create your account and get ready to participate.
+            </p>
+        </div>
+
+    </div>
+
+    <a href="/register" class="btn btn-light cta-button">
+        Join VoteSphere
+        <i class="bi bi-arrow-right"></i>
+    </a>
+
+</section>
+
+{% endblock %}
+
+
+{% block footer %}
+
+<footer class="landing-footer">
+
+    <div class="landing-footer-brand">
+
+        <span class="brand-icon">
+            <i class="bi bi-check2-square"></i>
+        </span>
+
+        <span>
+            VoteSphere
+        </span>
+
+    </div>
+
+    <p>
+        A cloud-based online voting system.
+    </p>
+
+    <span class="landing-footer-copyright">
+        &copy; <span data-current-year></span> VoteSphere
+    </span>
+
+</footer>
+
+{% endblock %}

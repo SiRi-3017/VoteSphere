@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Access Restricted | VoteSphere{% endblock %}
+
+{% block content %}
+
+<div class="access-denied-page">
+    <div class="access-denied-card">
+
+        <!-- Security Icon -->
+        <div class="access-denied-icon">
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+
+        <!-- Heading -->
+        <span class="access-denied-label">
+            ACCESS RESTRICTED
+        </span>
+
+        <h1>Voting Access Denied</h1>
+
+        <p class="access-denied-message">
+            Your account has administrator privileges.
+            Voting is available only to registered voter accounts.
+        </p>
+
+        <!-- Information Message -->
+        <div class="access-denied-note">
+            <i class="bi bi-info-circle-fill"></i>
+            <span>
+                You can still manage elections from your admin dashboard.
+            </span>
+        </div>
+
+        <!-- Dashboard Button -->
+        <a href="{{ url_for('web.admin_dashboard') }}"
+           class="access-denied-btn">
+            <i class="bi bi-grid-fill"></i>
+            Return to Admin Dashboard
+        </a>
+
+        <!-- Footer -->
+        <div class="access-denied-footer">
+            <i class="bi bi-shield-check"></i>
+            VoteSphere • Secure Digital Elections
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,155 @@
+
+{% extends "base.html" %}
+
+{% block title %}Elections | VoteSphere{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Page Header -->
+    <div class="mb-5">
+        <span class="badge rounded-pill mb-3"
+              style="background: #e0f7ff; color: #0b1f3a;">
+            VOTESPHERE
+        </span>
+
+        <h1 class="fw-bold" style="color: #0b1f3a;">
+            Available Elections
+        </h1>
+
+        <p class="text-secondary">
+            Explore active elections and make your voice heard.
+        </p>
+    </div>
+
+    <!-- Elections List -->
+    {% if elections %}
+
+        <div class="row g-4">
+
+            {% for election in elections %}
+
+                <div class="col-md-6 col-xl-4">
+
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+
+                        <!-- Cyan Accent -->
+                        <div style="height: 5px;
+                                    background: linear-gradient(90deg, #0b1f3a, #06b6d4);">
+                        </div>
+
+                        <div class="card-body p-4 d-flex flex-column">
+
+                            <!-- Status -->
+                            <div class="mb-3">
+                                {% if election.status == "open" %}
+                                    <span class="badge rounded-pill"
+                                          style="background: #dcfce7; color: #166534;">
+                                        Open
+                                    </span>
+                                {% elif election.status == "closed" %}
+                                    <span class="badge rounded-pill"
+                                          style="background: #f1f5f9; color: #475569;">
+                                        Closed
+                                    </span>
+                                {% else %}
+                                    <span class="badge rounded-pill"
+                                          style="background: #e0f7ff; color: #0b1f3a;">
+                                        {{ election.status|capitalize }}
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Election Title -->
+                            <h4 class="fw-bold mb-3"
+                                style="color: #0b1f3a;">
+                                {{ election.title }}
+                            </h4>
+
+                            <!-- Description -->
+                            <p class="text-secondary">
+                                {{ election.description or
+                                   "Review the election details and participating candidates." }}
+                            </p>
+
+                            <!-- Dates -->
+                            <div class="mt-2 mb-4">
+
+                                {% if election.starts_at %}
+                                    <div class="small text-secondary mb-2">
+                                        <i class="bi bi-calendar-event me-2"></i>
+                                        Starts:
+                                        {{ election.starts_at.strftime("%d %b %Y, %I:%M %p") }}
+                                    </div>
+                                {% endif %}
+
+                                {% if election.ends_at %}
+                                    <div class="small text-secondary">
+                                        <i class="bi bi-calendar-check me-2"></i>
+                                        Ends:
+                                        {{ election.ends_at.strftime("%d %b %Y, %I:%M %p") }}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
+                            <!-- Action -->
+                            <div class="mt-auto">
+
+                                {% if election.id in voted_election_ids %}
+
+                                    <div class="alert alert-success rounded-3 mb-3">
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+                                        You have already voted.
+                                    </div>
+
+                                {% endif %}
+
+                                <a href="{{ url_for(
+                                    'web.election_details',
+                                    election_id=election.id
+                                ) }}"
+                                   class="btn rounded-pill w-100 py-2 fw-semibold"
+                                   style="background: #0b1f3a; color: white;">
+
+                                    View Election
+                                    <i class="bi bi-arrow-right ms-2"></i>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <!-- Empty State -->
+        <div class="text-center py-5">
+
+            <div class="mb-3"
+                 style="font-size: 3rem; color: #0891b2;">
+                <i class="bi bi-calendar-x"></i>
+            </div>
+
+            <h4 class="fw-bold" style="color: #0b1f3a;">
+                No Elections Available
+            </h4>
+
+            <p class="text-secondary">
+                There are currently no elections available to participate in.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}

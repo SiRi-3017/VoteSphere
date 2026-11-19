@@ -1,0 +1,543 @@
+{% extends "base.html" %}
+
+{% block title %}Voter Dashboard | VoteSphere{% endblock %}
+
+{% block breadcrumb %}
+<span class="breadcrumb-muted">Voter</span>
+<i class="bi bi-chevron-right"></i>
+<span class="breadcrumb-current">Dashboard</span>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .voter-dashboard {
+        padding: 28px 0;
+    }
+
+    .voter-welcome {
+        background: linear-gradient(120deg, #0b1f3a, #2457a7, #06b6d4);
+        color: white;
+        border-radius: 24px;
+        padding: 38px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+    }
+
+    .voter-eyebrow {
+        color: #a5f3fc;
+        font-size: .8rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+
+    .voter-welcome h1 {
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        font-weight: 800;
+        margin: 14px 0;
+    }
+
+    .voter-welcome p {
+        color: rgba(255, 255, 255, .8);
+        max-width: 600px;
+        margin-bottom: 0;
+    }
+
+    .voter-welcome-icon {
+        font-size: 4.5rem;
+        color: #a5f3fc;
+        opacity: .9;
+    }
+
+    .voter-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .voter-stat-card {
+        background: white;
+        border: 1px solid #e8edf5;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 8px 28px rgba(11, 31, 58, .05);
+    }
+
+    .voter-stat-icon {
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 1.4rem;
+        margin-bottom: 18px;
+    }
+
+    .voter-stat-label {
+        color: #64748b;
+        font-size: .9rem;
+        font-weight: 600;
+    }
+
+    .voter-stat-value {
+        color: #0b1f3a;
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 7px 0;
+    }
+
+    .voter-stat-note {
+        color: #94a3b8;
+        font-size: .82rem;
+        margin: 0;
+    }
+
+    .voter-section {
+        background: white;
+        border: 1px solid #e8edf5;
+        border-radius: 20px;
+        padding: 28px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 28px rgba(11, 31, 58, .05);
+    }
+
+    .voter-section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 24px;
+    }
+
+    .voter-section-heading h2 {
+        color: #0b1f3a;
+        font-size: 1.3rem;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .voter-section-heading p {
+        color: #64748b;
+        margin: 6px 0 0;
+        font-size: .9rem;
+    }
+
+    .voter-section-link {
+        color: #2563eb;
+        font-size: .9rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .voter-election-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .voter-election-card {
+        border: 1px solid #e8edf5;
+        border-radius: 16px;
+        padding: 22px;
+        transition: .2s ease;
+    }
+
+    .voter-election-card:hover {
+        border-color: #06b6d4;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(11, 31, 58, .05);
+    }
+
+    .voter-election-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .voter-election-icon {
+        width: 45px;
+        height: 45px;
+        display: grid;
+        place-items: center;
+        border-radius: 13px;
+        background: #eef6ff;
+        color: #3188df;
+        font-size: 1.4rem;
+    }
+
+    .voter-status {
+        background: #e6f8f0;
+        color: #13845d;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: .75rem;
+        font-weight: 750;
+    }
+
+    .voter-election-card h3 {
+        color: #0b1f3a;
+        font-size: 1.05rem;
+        font-weight: 750;
+        margin: 0 0 9px;
+    }
+
+    .voter-election-card > p {
+        color: #7b879b;
+        font-size: .88rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .voter-election-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        width: 100%;
+        box-sizing: border-box;
+        text-decoration: none;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 16px;
+        background: linear-gradient(135deg, #287de0, #31a6e8);
+        color: white;
+        font-size: .9rem;
+        font-weight: 750;
+        transition: .2s ease;
+    }
+
+    .voter-election-btn:hover {
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 7px 16px rgba(40, 125, 224, .2);
+    }
+
+    .voter-history-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .voter-history-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 17px 0;
+        border-bottom: 1px solid #edf1f6;
+    }
+
+    .voter-history-item:first-child {
+        padding-top: 0;
+    }
+
+    .voter-history-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .voter-history-icon {
+        width: 43px;
+        height: 43px;
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: #e6f8f0;
+        color: #13845d;
+        font-size: 1.2rem;
+    }
+
+    .voter-history-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .voter-history-info h3 {
+        color: #0b1f3a;
+        font-size: .95rem;
+        font-weight: 750;
+        margin: 0 0 5px;
+    }
+
+    .voter-history-info p {
+        color: #8792a5;
+        font-size: .82rem;
+        margin: 0;
+    }
+
+    .voter-history-status {
+        color: #13845d;
+        background: #e6f8f0;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: .75rem;
+        font-weight: 750;
+        white-space: nowrap;
+    }
+
+    .voter-empty-state {
+        text-align: center;
+        padding: 40px 15px;
+    }
+
+    .voter-empty-icon {
+        font-size: 2.8rem;
+        color: #9bbce2;
+        margin-bottom: 12px;
+    }
+
+    .voter-empty-state h3 {
+        color: #0b1f3a;
+        font-size: 1.05rem;
+        font-weight: 750;
+        margin: 0 0 8px;
+    }
+
+    .voter-empty-state p {
+        color: #8a96a8;
+        font-size: .9rem;
+        margin: 0;
+    }
+
+    @media (max-width: 850px) {
+        .voter-election-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .voter-welcome {
+            padding: 25px;
+        }
+
+        .voter-welcome-icon {
+            display: none;
+        }
+
+        .voter-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .voter-section {
+            padding: 20px;
+        }
+
+        .voter-section-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .voter-history-item {
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+    }
+</style>
+
+<div class="voter-dashboard">
+
+    <!-- Welcome -->
+    <section class="voter-welcome">
+        <div>
+            <span class="voter-eyebrow">
+                <i class="bi bi-person-check"></i>
+                VOTER PORTAL
+            </span>
+
+            <h1>Welcome back, {{ user.name }}!</h1>
+
+            <p>
+                Your voice matters. Explore active elections and make
+                your vote count with VoteSphere.
+            </p>
+        </div>
+
+        <div class="voter-welcome-icon">
+            <i class="bi bi-person-vote"></i>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="voter-stats">
+
+        <div class="voter-stat-card">
+            <div class="voter-stat-icon">
+                <i class="bi bi-calendar-event"></i>
+            </div>
+
+            <span class="voter-stat-label">Available Elections</span>
+
+            <div class="voter-stat-value">
+                {{ available_elections|length }}
+            </div>
+
+            <p class="voter-stat-note">
+                Elections currently open for voting
+            </p>
+        </div>
+
+        <div class="voter-stat-card">
+            <div class="voter-stat-icon">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+
+            <span class="voter-stat-label">Votes Cast</span>
+
+            <div class="voter-stat-value">
+                {{ votes_cast }}
+            </div>
+
+            <p class="voter-stat-note">
+                Your recorded voting participation
+            </p>
+        </div>
+
+    </section>
+
+    <!-- Available Elections -->
+    <section class="voter-section">
+
+        <div class="voter-section-heading">
+            <div>
+                <h2>Available Elections</h2>
+                <p>Choose an election and make your voice heard.</p>
+            </div>
+
+            <a href="{{ url_for('web.elections_page') }}"
+               class="voter-section-link">
+                View all →
+            </a>
+        </div>
+
+        {% if available_elections %}
+
+            <div class="voter-election-grid">
+
+                {% for election in available_elections %}
+
+                    <article class="voter-election-card">
+
+                        <div class="voter-election-top">
+                            <div class="voter-election-icon">
+                                <i class="bi bi-ballot"></i>
+                            </div>
+
+                            <span class="voter-status">
+                                Open
+                            </span>
+                        </div>
+
+                        <h3>{{ election.title }}</h3>
+
+                        <p>
+                            {{ election.description
+                               if election.description
+                               else "Participate in this election and make your vote count." }}
+                        </p>
+
+                        <a href="{{ url_for('web.election_details', election_id=election.id) }}"
+                           class="voter-election-btn">
+                            View Election
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="voter-empty-state">
+                <div class="voter-empty-icon">
+                    <i class="bi bi-calendar2-x"></i>
+                </div>
+
+                <h3>No active elections</h3>
+
+                <p>
+                    There are no elections open for voting right now.
+                    Please check back later.
+                </p>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+    <!-- Voting History -->
+    <section class="voter-section">
+
+        <div class="voter-section-heading">
+            <div>
+                <h2>Your Voting History</h2>
+                <p>A record of your participation.</p>
+            </div>
+
+            <a href="{{ url_for('web.results_page') }}"
+               class="voter-section-link">
+                View results →
+            </a>
+        </div>
+
+        {% if voting_history %}
+
+            <div class="voter-history-list">
+
+                {% for vote in voting_history %}
+
+                    <div class="voter-history-item">
+
+                        <div class="voter-history-icon">
+                            <i class="bi bi-check2"></i>
+                        </div>
+
+                        <div class="voter-history-info">
+                            <h3>{{ vote.election.title }}</h3>
+
+                            <p>
+                                Vote recorded:
+                                {{ vote.cast_at.strftime('%d %b %Y, %I:%M %p') }}
+                            </p>
+                        </div>
+
+                        <span class="voter-history-status">
+                            Completed
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="voter-empty-state">
+                <div class="voter-empty-icon">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+
+                <h3>No voting activity yet</h3>
+
+                <p>
+                    Your voting history will appear here after you
+                    participate in an election.
+                </p>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}
